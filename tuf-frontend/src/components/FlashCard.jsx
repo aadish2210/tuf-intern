@@ -18,7 +18,7 @@ const FlashCard = ({ question, answer }) => {
           onClick={flip}
           className=" flex items-center justify-center p-3 sm:w-[500px] w-[250px] bg-white min-h-[400px] rounded-lg shadow-lg shadow-red-700 hover:shadow-red-600"
         >
-          <h1 className="text-black text-center">
+          <h1 className="text-black text-center text-lg">
             {question}
           </h1>
         </div>
@@ -26,7 +26,7 @@ const FlashCard = ({ question, answer }) => {
           onClick={flip}
           className="p-3 flex justify-center items-center sm:w-[500px] w-[250px] bg-white min-h-[400px] rounded-lg shadow-lg shadow-green-700 hover:shadow-green-600"
         >
-          <h1 className="text-black font-semibold text-xl">{answer}</h1>
+          <h1 className="text-black font-semibold text-xl text-center">{answer}</h1>
         </div>
       </ReactCardFlip>
     </div>
