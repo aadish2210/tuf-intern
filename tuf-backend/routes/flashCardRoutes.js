@@ -5,7 +5,8 @@ const{
     getFlashcardById,
     createFlashcard,
     deleteFlashCard,
-    deleteFlashcardById
+    deleteFlashcardById,
+    updateFlashCard
 
 } = require('../controllers/flashCards')
 
@@ -21,5 +22,7 @@ router.post('/', createFlashcard)
 router.delete('/', deleteFlashCard)
 
 router.delete('/:id', deleteFlashcardById)
+
+router.post("/:id" , updateFlashCard)
 
 module.exports = router

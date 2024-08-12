@@ -12,25 +12,27 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 import axios from "axios";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import config from "../../config";
 const URL = config.apiUrl;
-export default function AddFlashCardModal() {
+import PropTypes from "prop-types";
+export default function UpdateFlashCardModal({ data }) {
+  UpdateFlashCardModal.propTypes = {
+    data: PropTypes.object.isRequired,
+  };
   function notify() {
-
-    toast("Sucessfully Added!");
+    toast("Sucessfully Edited!");
   }
   const queryClient = useQueryClient();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [question, setQuestion] = React.useState();
-  const [answer, setAnswer] = React.useState();
+  const [question, setQuestion] = React.useState(data.question);
+  const [answer, setAnswer] = React.useState(data.answer);
 
   const addFlashCardMutation = useMutation({
     mutationFn: async (newCard) => {
       try {
-        const response = await axios.post(URL, newCard);
+        const response = await axios.post(`${URL}/${data.id}`, newCard);
         return response; // Return the response data
       } catch (error) {
         return error; // Return the error object
@@ -38,7 +40,7 @@ export default function AddFlashCardModal() {
     },
     onSuccess: () => {
       notify();
-      queryClient.invalidateQueries(['flashcardlist'])
+      queryClient.invalidateQueries(["flashcardlist"]);
       onOpenChange(false); // Close the modal on success
     },
   });
@@ -51,14 +53,14 @@ export default function AddFlashCardModal() {
   return (
     <>
       <Button onPress={onOpen} color="secondary" variant="ghost">
-        Create
+        Edit
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-[#ee4b2b]">
-                Create Card
+                Edit Card
               </ModalHeader>
               <ModalBody>
                 <form
@@ -73,6 +75,7 @@ export default function AddFlashCardModal() {
                     label="Enter Question"
                     className="h-[200px] border border-[#ee4b2b] border-solid rounded-lg"
                     onValueChange={setQuestion}
+                    value={question}
                   />
                   <Input
                     isRequired
@@ -82,6 +85,7 @@ export default function AddFlashCardModal() {
                     label="Enter Answer"
                     className="h-[200px] border border-[#ee4b2b] border-solid rounded-lg"
                     onValueChange={setAnswer}
+                    value={answer}
                   />
                 </form>
               </ModalBody>

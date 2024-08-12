@@ -2,10 +2,13 @@ import React from "react";
 import ReactCardFlip from "react-card-flip";
 import Lottie from "lottie-react";
 import celebrateAnimation from "../animations/celebrate.json"; // Replace with your animation JSON file
-import config from "../../config";
+import PropTypes from "prop-types"
 
 const FlashCard = ({ question, answer }) => {
-  console.log(config)
+  FlashCard.propTypes = {
+    question: PropTypes.string.isRequired,
+    answer: PropTypes.string.isRequired,
+  };
   const [flipped, setFlipped] = React.useState(false);
   const [showCelebration, setShowCelebration] = React.useState(false);
 

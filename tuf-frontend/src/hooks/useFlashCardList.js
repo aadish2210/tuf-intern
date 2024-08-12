@@ -16,7 +16,6 @@ const useFlashCardList = () => {
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["flashcardlist"],
-    staleTime : 5000,
     queryFn: getFlashCardList,
   });
 
