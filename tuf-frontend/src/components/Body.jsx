@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FlashCard from "./FlashCard";
 import { Pagination, Spinner } from "@nextui-org/react";
 import { ToastContainer } from "react-toastify";
 import useFlashCardList from "../hooks/useFlashCardList";
 
-
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const { flashCardData, flashCardListIsLoading} =
-    useFlashCardList();
+  const { flashCardData, flashCardListIsLoading } = useFlashCardList();
+
+  useEffect(() => {
+    if (flashCardData.count < currentPage) {
+      setCurrentPage(flashCardData.count);
+    }
+  }, [currentPage, flashCardData]);
 
   if (flashCardListIsLoading) {
     return (
@@ -45,7 +49,7 @@ const Body = () => {
           total={flashCardData.count}
           initialPage={1}
         />
-  
+
         <ToastContainer />
       </div>
     )
