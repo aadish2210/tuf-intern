@@ -1,12 +1,47 @@
-import React from "react";
+import {useState} from "react";
 import FlashCard from "./FlashCard";
-import { Input } from "@nextui-org/input";
+import { Pagination,Spinner } from "@nextui-org/react";
+
+import useFlashCardList from "../hooks/useFlashCardList";
+
 const Body = () => {
-  const [value, setValue] = React.useState("");
-  return (
+  const [currentPage, setCurrentPage] = useState(1);
+  const {flashCardData,flashCardListIsLoading , flashCardListError} = useFlashCardList();
+  console.log({flashCardData,flashCardListIsLoading , flashCardListError})
+  
+  console.log(currentPage)
+  if(flashCardListIsLoading) {
+    return (
+    <div className="flex justify-center items-center h-[80vh]">
+     <Spinner color="secondary"/>
+    </div>)
+  }
+  if(!flashCardListIsLoading && flashCardData.count==0){
+    return (
+      <div className="flex justify-center items-center h-[80vh]">
+        <h1 className="text-white">Nothing to show here!</h1>
+      </div>
+    )
+  }
+  return !flashCardListIsLoading && (
     <div className="flex flex-col justify-center items-center h-[80vh] mt-8 gap-8">
-      <FlashCard question={"What is worst case time complexity of quick sort algorithm?"}  answer={"O(n^2)"} />
-      <Input color="danger" isClearable type="email" label="Enter Your Answer" className="sm:w-[500px] w-[250px]" onValueChange={setValue}/>
+      <FlashCard
+        question={flashCardData.data[currentPage-1].question}
+        answer={flashCardData.data[currentPage-1].answer}
+      />
+      <Pagination
+        onChange={setCurrentPage}
+        classNames={{
+          wrapper: "gap-0 overflow-visible h-8 rounded border border-divider",
+          item: "w-8 h-8 text-small rounded-none bg-white",
+          cursor:
+            "bg-gradient-to-b shadow-lg from-[#ee4b2b] to-[#f05d40] dark:from-default-300 dark:to-default-100 text-white font-bold",
+        }}
+        isCompact
+        showControls
+        total={flashCardData.count}
+        initialPage={1}
+      />
     </div>
   );
 };

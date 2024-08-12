@@ -1,5 +1,5 @@
 import React from 'react'
-import tufSvg from '../assets/tuf.svg';
+import tufSvg from '../assets/tuf-circle.svg';
 import { FaRegUser } from "react-icons/fa";
 
 const Header = () => {
