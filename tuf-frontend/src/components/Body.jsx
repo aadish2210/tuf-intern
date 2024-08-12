@@ -3,7 +3,7 @@ import FlashCard from "./FlashCard";
 import { Pagination, Spinner } from "@nextui-org/react";
 import { ToastContainer } from "react-toastify";
 import useFlashCardList from "../hooks/useFlashCardList";
-import Admin from "./Admin";
+
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,7 +21,6 @@ const Body = () => {
     return (
       <div className="flex flex-col justify-evenly items-center h-[80vh]">
         <h1 className="text-white">Nothing to show here!</h1>
-        <Admin id={0} count={0} data={null} />
         <ToastContainer />
       </div>
     );
@@ -46,11 +45,7 @@ const Body = () => {
           total={flashCardData.count}
           initialPage={1}
         />
-        <Admin
-          id={flashCardData.data[currentPage - 1].id}
-          count={flashCardData.count}
-          data={flashCardData.data[currentPage - 1]}
-        />
+  
         <ToastContainer />
       </div>
     )

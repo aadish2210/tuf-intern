@@ -9,45 +9,24 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-import axios from "axios";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import config from "../../config";
-const URL = config.apiUrl;
 import PropTypes from "prop-types";
+import useUpdateFlashcard from "../hooks/useUpdateFlashCard";
+
 export default function UpdateFlashCardModal({ data }) {
+  
   UpdateFlashCardModal.propTypes = {
     data: PropTypes.object.isRequired,
   };
-  function notify() {
-    toast("Sucessfully Edited!");
-  }
-  const queryClient = useQueryClient();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [question, setQuestion] = React.useState(data.question);
   const [answer, setAnswer] = React.useState(data.answer);
-
-  const addFlashCardMutation = useMutation({
-    mutationFn: async (newCard) => {
-      try {
-        const response = await axios.post(`${URL}/${data.id}`, newCard);
-        return response; // Return the response data
-      } catch (error) {
-        return error; // Return the error object
-      }
-    },
-    onSuccess: () => {
-      notify();
-      queryClient.invalidateQueries(["flashcardlist"]);
-      onOpenChange(false); // Close the modal on success
-    },
-  });
+  const updateFlashcard = useUpdateFlashcard({onOpenChange : onOpenChange}); 
 
   const handleSubmit = () => {
-    const newCard = { question, answer };
-    addFlashCardMutation.mutate(newCard); // Trigger mutation on submit
+    const newCard = {...data, question, answer };
+    updateFlashcard.mutate(newCard); 
+
   };
 
   return (
