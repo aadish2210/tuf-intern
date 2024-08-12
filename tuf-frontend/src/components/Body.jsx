@@ -1,15 +1,16 @@
 import {useState} from "react";
 import FlashCard from "./FlashCard";
 import { Pagination,Spinner } from "@nextui-org/react";
-
+import { ToastContainer } from 'react-toastify';
 import useFlashCardList from "../hooks/useFlashCardList";
+import Admin from "./Admin";
 
 const Body = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const {flashCardData,flashCardListIsLoading , flashCardListError} = useFlashCardList();
-  console.log({flashCardData,flashCardListIsLoading , flashCardListError})
+  // console.log({flashCardData,flashCardListIsLoading , flashCardListError})
   
-  console.log(currentPage)
+  // console.log(currentPage)
   if(flashCardListIsLoading) {
     return (
     <div className="flex justify-center items-center h-[80vh]">
@@ -18,8 +19,10 @@ const Body = () => {
   }
   if(!flashCardListIsLoading && flashCardData.count==0){
     return (
-      <div className="flex justify-center items-center h-[80vh]">
+      <div className="flex flex-col justify-evenly items-center h-[80vh]">
         <h1 className="text-white">Nothing to show here!</h1>
+        <Admin/>
+        <ToastContainer />
       </div>
     )
   }
@@ -42,6 +45,8 @@ const Body = () => {
         total={flashCardData.count}
         initialPage={1}
       />
+      <Admin/>
+      <ToastContainer />
     </div>
   );
 };
