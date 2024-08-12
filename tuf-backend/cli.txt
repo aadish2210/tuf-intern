@@ -1,0 +1,11 @@
+1. Create FlashCard Model Migration
+npx sequelize-cli migration:generate --name create-flashcard
+
+2. Migreate FlashCard Model to create table in Db
+npx sequelize-cli db:migrate
+
+3. Create seeder file for flashcards
+npx sequelize-cli seed:generate --name seed-flashcards
+
+4. Run flashcard seeder
+npx sequelize-cli db:seed:all
