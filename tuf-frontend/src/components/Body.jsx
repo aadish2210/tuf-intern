@@ -9,8 +9,8 @@ const Body = () => {
   const { flashCardData, flashCardListIsLoading } = useFlashCardList();
 
   useEffect(() => {
-    if (flashCardData.count < currentPage) {
-      setCurrentPage(flashCardData.count);
+    if (flashCardData?.count < currentPage) {
+      setCurrentPage(flashCardData?.count);
     }
   }, [currentPage, flashCardData]);
 
