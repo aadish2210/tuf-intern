@@ -9,8 +9,8 @@ const Body = () => {
   const { flashCardData, flashCardListIsLoading } = useFlashCardList();
 
   useEffect(() => {
-    if (flashCardData?.count < currentPage) {
-      setCurrentPage(flashCardData?.count);
+    if (flashCardData && currentPage > flashCardData.count) {
+      setCurrentPage(flashCardData.count || 1);
     }
   }, [currentPage, flashCardData]);
 
@@ -21,7 +21,8 @@ const Body = () => {
       </div>
     );
   }
-  if (!flashCardListIsLoading && flashCardData.count == 0) {
+
+  if (!flashCardListIsLoading && flashCardData.count === 0) {
     return (
       <div className="flex flex-col justify-evenly items-center h-[80vh]">
         <h1 className="text-white">Nothing to show here!</h1>
@@ -29,30 +30,30 @@ const Body = () => {
       </div>
     );
   }
-  return (
-    !flashCardListIsLoading && (
-      <div className="flex flex-col justify-center items-center h-[80vh] mt-8 gap-8">
-        <FlashCard
-          question={flashCardData.data[currentPage - 1].question}
-          answer={flashCardData.data[currentPage - 1].answer}
-        />
-        <Pagination
-          onChange={setCurrentPage}
-          classNames={{
-            wrapper: "gap-0 overflow-visible h-8 rounded border border-divider",
-            item: "w-8 h-8 text-small rounded-none bg-white",
-            cursor:
-              "bg-gradient-to-b shadow-lg from-[#ee4b2b] to-[#f05d40] dark:from-default-300 dark:to-default-100 text-white font-bold",
-          }}
-          isCompact
-          showControls
-          total={flashCardData.count}
-          initialPage={1}
-        />
 
-        <ToastContainer />
-      </div>
-    )
+  return (
+    <div className="flex flex-col justify-center items-center h-[80vh] mt-8 gap-8">
+      <FlashCard
+        question={flashCardData.data[currentPage - 1]?.question}
+        answer={flashCardData.data[currentPage - 1]?.answer}
+      />
+      <Pagination
+        onChange={setCurrentPage}
+        classNames={{
+          wrapper: "gap-0 overflow-visible h-8 rounded border border-divider",
+          item: "w-8 h-8 text-small rounded-none bg-white",
+          cursor:
+            "bg-gradient-to-b shadow-lg from-[#ee4b2b] to-[#f05d40] dark:from-default-300 dark:to-default-100 text-white font-bold",
+        }}
+        isCompact
+        showControls
+        total={flashCardData.count}
+        initialPage={1}
+        page={currentPage}
+      />
+
+      <ToastContainer />
+    </div>
   );
 };
 
