@@ -1,28 +1,27 @@
-const express = require('express')
+const express = require('express');
 
 const{
     getAllFlashcards,
     getFlashcardById,
     createFlashcard,
-    deleteFlashCard,
+    deleteFlashcards,
     deleteFlashcardById,
-    updateFlashCard
+    updateFlashcard
 
-} = require('../controllers/flashCards')
+} = require('../controllers/flashCards');
 
-const router = express.Router()
+const router = express.Router();
 
+router.get('/', getAllFlashcards);
 
-router.get('/', getAllFlashcards)
+router.get('/:id', getFlashcardById);
 
-router.get('/:id', getFlashcardById)
+router.post('/', createFlashcard);
 
-router.post('/', createFlashcard)
+router.delete('/', deleteFlashcards);
 
-router.delete('/', deleteFlashCard)
+router.delete('/:id', deleteFlashcardById);
 
-router.delete('/:id', deleteFlashcardById)
+router.post("/:id" , updateFlashcard);
 
-router.post("/:id" , updateFlashCard)
-
-module.exports = router
+module.exports = router;

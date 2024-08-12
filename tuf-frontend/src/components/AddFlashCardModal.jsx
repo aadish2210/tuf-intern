@@ -7,7 +7,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
+  Textarea,
 } from "@nextui-org/react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,7 +16,8 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import config from "../../config";
-const URL = config.apiUrl;
+const URL = config.apiUrl+"/flashcards";
+
 export default function AddFlashCardModal() {
   function notify() {
 
@@ -65,7 +66,8 @@ export default function AddFlashCardModal() {
                   className="flex flex-col gap-5"
                   onSubmit={(e) => e.preventDefault}
                 >
-                  <Input
+                  
+                  <Textarea
                     isRequired
                     isClearable
                     color="secondary"
@@ -74,7 +76,7 @@ export default function AddFlashCardModal() {
                     className="h-[200px] border border-[#ee4b2b] border-solid rounded-lg"
                     onValueChange={setQuestion}
                   />
-                  <Input
+                  <Textarea
                     isRequired
                     isClearable
                     color="secondary"

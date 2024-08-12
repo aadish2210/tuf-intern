@@ -14,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import useFlashCardList from "../hooks/useFlashCardList";
 import UpdateFlashCardModal from "./UpdateFlashCardModal";
 import useDeleteFlashcard from "../hooks/useDeleteFlashCard";
+import AddFlashCardModal from "./AddFlashCardModal";
 
 export default function AdminTable() {
   const deleteFlashcardMutation = useDeleteFlashcard();
@@ -78,7 +79,11 @@ export default function AdminTable() {
   }
   return (
     <div className="m-[50px]">
+      <div className="flex gap-5 justify-between items-center mx-4">
       <h1 className="text-[#ee4b2b] text-2xl p-5 pl-0">Admin Dashboard</h1>
+      <AddFlashCardModal/>
+      </div>
+      
       <Table
         aria-label="Example table with custom cells"
         bottomContent={
@@ -118,6 +123,7 @@ export default function AdminTable() {
           )}
         </TableBody>
       </Table>
+      
     </div>
   );
 }

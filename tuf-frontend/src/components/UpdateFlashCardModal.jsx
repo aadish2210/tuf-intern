@@ -7,7 +7,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
+  Textarea,
 } from "@nextui-org/react";
 import "react-toastify/dist/ReactToastify.css";
 import PropTypes from "prop-types";
@@ -46,7 +46,7 @@ export default function UpdateFlashCardModal({ data }) {
                   className="flex flex-col gap-5"
                   onSubmit={(e) => e.preventDefault}
                 >
-                  <Input
+                  <Textarea
                     isRequired
                     isClearable
                     color="secondary"
@@ -56,7 +56,7 @@ export default function UpdateFlashCardModal({ data }) {
                     onValueChange={setQuestion}
                     value={question}
                   />
-                  <Input
+                  <Textarea
                     isRequired
                     isClearable
                     color="secondary"

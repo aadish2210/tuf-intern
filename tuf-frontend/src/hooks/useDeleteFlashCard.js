@@ -3,7 +3,7 @@ import axios from "axios";
 import config from "../../config";
 import { toast } from "react-toastify";
 
-const URL = config.apiUrl;
+const URL = config.apiUrl+"/flashcards";
 
 const useDeleteFlashcard = () => {
   const queryClient = useQueryClient();

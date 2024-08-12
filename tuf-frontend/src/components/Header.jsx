@@ -1,4 +1,4 @@
-import React from 'react'
+
 import tufSvg from '../assets/tuf-circle.svg';
 import { FaRegUser } from "react-icons/fa";
 import { Link } from 'react-router-dom';

@@ -1,9 +1,8 @@
-import React from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import config from "../../config";
 
-const URL = config.apiUrl;
+const URL = config.apiUrl+"/flashcards";
 
 const useFlashCardList = () => {
 

@@ -3,21 +3,18 @@ const createResponse = require("../utils/response");
 
 const getAllFlashcards = async (req, res) => {
   try {
-    let count = 0;
     const flashcards = await flashcard.findAll();
+    const count = flashcards.length;
 
-    if (flashcards) {
-      count = flashcards.length;
-    }
     res.send(
-      createResponse(200, "ok", {
+      createResponse(200, "Flashcards retrieved successfully", {
         count,
         data: flashcards,
       })
     );
   } catch (error) {
     console.error("Error retrieving flashcards:", error);
-    throw error; // Or handle the error appropriately
+    res.send(createResponse(500, "Internal server error", null, error.message));
   }
 };
 
@@ -26,66 +23,78 @@ const getFlashcardById = async (req, res) => {
   try {
     const data = await flashcard.findByPk(id);
     if (!data) {
-      throw new Error("Flashcard not found");
+      return res.send(
+        createResponse(404, "Flashcard not found", null, "Flashcard not found")
+      );
     }
-    res.send(createResponse(200, "ok", data));
+    res.send(createResponse(200, "Flashcard retrieved successfully", data));
   } catch (error) {
     console.error("Error retrieving flashcard:", error);
-    throw error; // Or handle the error appropriately
+    res.send(createResponse(500, "Internal server error", null, error.message));
   }
 };
 
 const createFlashcard = async (req, res) => {
   const { question, answer } = req.body;
   try {
-    await flashcard.create({
-      question,
-      answer,
-    });
-    res.send(createResponse(201, "Flashcard created"));
+    await flashcard.create({ question, answer });
+
+    req.io.emit("refetch", { key: "flashcardlist" });
+    req.io.emit("notification", { msg: "New Flashcard added" });
+
+    res.status(201).send(createResponse(201, "Flashcard created successfully"));
   } catch (error) {
     console.error("Error creating flashcard:", error);
-  }
-};
-
-const deleteFlashcardById = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const data = await flashcard.findByPk(id);
-    if (!data) {
-      throw new Error("Flashcard not found");
-    }
-    await data.destroy();
-    res.send(createResponse(200, "Deletion Successful"));
-  } catch (error) {
-    console.error("Error deleting flashcard:", error);
-    throw error; // Or handle the error appropriately
-  }
-};
-
-const deleteFlashCard = async (req, res) => {
-  try {
-    const deletedCount = await flashcard.destroy({
-      where: {},
-      truncate: true,
-    });
-    res.send(
-      createResponse(200, "Items deleted successfully", { deletedCount })
-    );
-  } catch (error) {
-    console.error("Error deleting items:", error);
     res.send(createResponse(500, "Internal server error", null, error.message));
   }
 };
 
-const updateFlashCard = async (req, res) => {
+const deleteFlashcardById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const data = await flashcard.findByPk(id);
+    if (!data) {
+      return res.send(
+        createResponse(404, "Flashcard not found", null, "Flashcard not found")
+      );
+    }
+    await data.destroy();
 
+    req.io.emit("refetch", { key: "flashcardlist" });
+
+    res.send(createResponse(200, "Flashcard deleted successfully"));
+  } catch (error) {
+    console.error("Error deleting flashcard:", error);
+    next(error); // Pass error to global error handler
+  }
+};
+
+const deleteFlashcards = async (req, res) => {
+  try {
+    const deletedCount = await flashcard.destroy({ where: {}, truncate: true });
+
+    req.io.emit("refetch", { key: "flashcardlist" });
+
+    res.send(
+      createResponse(200, "All flashcards deleted successfully", {
+        deletedCount,
+      })
+    );
+  } catch (error) {
+    console.error("Error deleting flashcards:", error);
+    res.send(createResponse(500, "Internal server error", null, error.message));
+  }
+};
+
+const updateFlashcard = async (req, res) => {
   const updatedData = req.body;
   const { id } = req.params;
   try {
     const item = await flashcard.findByPk(id);
     if (!item) {
-      throw new Error("Flashcard not found");
+      return res.send(
+        createResponse(404, "Flashcard not found", null, "Flashcard not found")
+      );
     }
 
     item.question = updatedData.question || item.question;
@@ -93,18 +102,20 @@ const updateFlashCard = async (req, res) => {
 
     await item.save();
 
-    res.send(item);
+    req.io.emit("refetch", { key: "flashcardlist" });
+
+    res.send(createResponse(200, "Flashcard updated successfully", item));
   } catch (error) {
     console.error("Error updating flashcard:", error);
-    throw error;
+    res.send(createResponse(500, "Internal server error", null, error.message));
   }
 };
 
 module.exports = {
   getAllFlashcards,
   getFlashcardById,
-  deleteFlashCard,
-  deleteFlashcardById,
   createFlashcard,
-  updateFlashCard,
+  deleteFlashcardById,
+  deleteFlashcards,
+  updateFlashcard,
 };
